@@ -1,0 +1,29 @@
+# @package algorithm.backbone
+
+model_type: flow_vit # or fernn, baseline
+
+name: flow_vit
+
+world_size: 16
+# previously the size of the model's view for fernn
+# window_size: 5
+
+v_range: 0
+no_self_motion_equivariance: false
+input_shape: (${.input_channels}, ${dataset.resolution[1]}, ${dataset.resolution[0]}) # c, h, w
+input_channels: 3
+fov_deg: 60.0
+
+# ViT Patch size
+hidden_channels: 256
+patch_size: 16
+decoder_depth: 6
+num_heads: 8
+map_proc_encoder_depth: 6
+
+flow_vit_ablation_params:
+  v_channel_maxpool_decode: false
+  v_channel_mixing_mode: "3d" # one of 'none', '2d_v_channel_flattened', or '3d'
+  v_channel_identity_emb: false
+  no_self_motion_equiv: false
+  external_action_dim:  ${dataset.external_cond_dim}

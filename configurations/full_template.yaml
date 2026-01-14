@@ -1,0 +1,412 @@
+# we use this template to vaslidate the correctness of yaml files, in case some keys are modified / added unexpectedly
+
+debug: false
+wandb:
+  entity: null
+  project: null
+  mode: online
+  api_key: ${secrets.wandb_api_key}
+resume: null
+load: null
+requeue: null
+skip_download: true
+ignore_cfg_validation: false
+experiment:
+  debug: ${debug}
+  tasks:
+  - training
+  devices: auto
+  calculate_throughput: false
+  training:
+    devices: ${experiment.devices}
+    precision: bf16
+    compile: ${algorithm.compile}
+    lr: 0.0001
+    lr_map: null
+    batch_size: 4
+    max_epochs: 40
+    max_steps: -1
+    max_time: null
+    dataloader:
+      num_workers: 8
+      shuffle: true
+      pin_memory: true
+      prefetch_factor: 2
+    optim:
+      accumulate_grad_batches: 1
+      gradient_clip_val: 1.0
+      opt_name: adamw
+      optimizer_beta:
+      - 0.9
+      - 0.99
+    checkpointing:
+      every_n_train_steps: 50000
+      every_n_epochs: null
+      train_time_interval: null
+      enable_version_counter: false
+      save_on_train_epoch_end: false
+      save_top_k: -1
+    strategy: deepspeed_stage_2
+    weight_decay: 0.001
+    lr_scheduler:
+      name: constant_with_warmup
+      num_warmup_steps: 5000
+    splits_included:
+    - static_memory_training_jul26
+  num_nodes: 1
+  validation:
+    precision: 32
+    compile: false
+    batch_size: 2
+    val_every_n_step: 10000
+    val_every_n_epoch: null
+    num_sanity_val_steps: 1
+    limit_batch: 1.0
+    dataloader:
+      num_workers: 4
+      shuffle: false
+      pin_memory: true
+      prefetch_factor: 2
+    inference_mode: true
+    devices: ${experiment.devices}
+    splits:
+    - validation
+    strategy: ddp
+    sample_during_training: true
+    is_preprocessing_expt: false
+    splits_included:
+    - static_memory_validation_jul26
+  test:
+    precision: 16-mixed
+    compile: false
+    batch_size: 16
+    limit_batch: 1.0
+    dataloader:
+      num_workers: 1
+      shuffle: false
+      pin_memory: true
+    inference_mode: true
+  find_unused_parameters: true
+  reload_dataloaders_every_n_epochs: 0
+  ema:
+    enable: true
+    decay: 0.9999
+    validate_original_weights: false
+dataset:
+  debug: ${debug}
+  name: none
+  save_dir: data/blockworld
+  cond_loading_style: 'one_hot'
+  latent:
+    enable: true
+    type: pre_sample
+    suffix: 0ynghcat
+    downsampling_factor: ${algorithm.vae.downsampling_factor}
+    num_channels: ${algorithm.vae.latent_dim}
+    is_preprocessing_expt: ${experiment.validation.is_preprocessing_expt}
+  downsampling_factor: ${algorithm.vae.downsampling_factor}
+  resolution:
+  - 320
+  - 320
+  observation_shape:
+  - 3
+  - ${dataset.resolution[1]}
+  - ${dataset.resolution[0]}
+  max_frames: 400
+  n_frames: ${dataset.max_frames}
+  frame_skip: 1
+  filter_min_len: null
+  external_cond_dim: 70
+  external_cond_stack: false
+  external_cond_processing: mask_first
+  preload: false
+  subdataset_size: null
+  cond_alignment: t->t+1
+  data_cond_alignment: t->t+1
+  num_validation_clips: 16
+  num_training_clips: null
+  num_default_clips: 8
+  transform_type: pad
+  training_splits: ${experiment.training.splits_included}
+  validation_splits: ${experiment.validation.splits_included}
+  env:
+    training: all
+    validation: all
+  use_depth: false
+  path_list: null
+algorithm:
+  calculate_throughput: false
+  debug: ${debug}
+  lr: ${experiment.training.lr}
+  training:
+    lr: ${experiment.training.lr}
+    weight_decay: ${experiment.training.weight_decay}
+    optimizer_beta: ${experiment.training.optim.optimizer_beta}
+    lr_scheduler: ${experiment.training.lr_scheduler}
+    strategy: ${experiment.training.strategy}
+    lr_map: ${experiment.training.lr_map}
+    batch_size: ${experiment.training.batch_size}
+    opt_name: ${experiment.training.optim.opt_name}
+  validation:
+    strategy: ${experiment.validation.strategy}
+    sample_during_training: ${experiment.validation.sample_during_training}
+    batch_size: ${experiment.validation.batch_size}
+  compile: false
+  load_opt_state: null
+  opt_state_key: null
+  load_model_state: null
+  model_state_key: null
+  load_model_state_mode: strict
+  handlers: null
+  tasks:
+    prediction:
+      enabled: true
+      history_guidance:
+        name: stabilized_conditional
+        keyframe_density: null
+        sliding_context_len: ${eval:'${dataset.max_frames} // 2 + 1'}
+        stabilization_level: 0.02
+      block_ssm:
+        keyframe_density: null
+      oasis:
+        mode: tf
+        cfg_scale: 5
+        stabilization_level: 0
+        gen_fr_num: 64
+      context_frames: ${eval:'${dataset.max_frames} // 2 + 1'}
+      sampling_strategy: history_guidance
+    interpolation:
+      enabled: false
+      history_guidance:
+        name: conditional
+      max_batch_size: null
+    reconstruction:
+      enabled: true
+  logging:
+    deterministic: 42
+    loss_freq: 100
+    grad_norm_freq: 1000
+    verbose_grad_info: false
+    max_num_videos: 32
+    n_metrics_frames: null
+    metrics:
+    - mse
+    - psnr
+    - ssim
+    metrics_batch_size: 16
+    sanity_generation: false
+    raw_dir: null
+    log_video_as_images:
+      enable: false
+      indices: null
+      format: pdf
+  checkpoint:
+    reset_optimizer: false
+    strict: true
+  scheduling_matrix: full_sequence
+  external_cond_processing: ${dataset.external_cond_processing}
+  varlen_context:
+    enabled: true
+    min: ${eval:'${dataset.max_frames} // 2 + 1'}
+    max: ${dataset.max_frames}
+    prob: 0.5
+  uniform_future:
+    enabled: false
+  fixed_context:
+    enabled: false
+    indices: null
+    dropout: 0
+  variable_context:
+    enabled: false
+    prob: 0
+    dropout: 0
+  normalize_depth_with_log: false
+  backbone:
+    in_channels: ${..vae.latent_dim}
+    out_channels: ${..vae.latent_dim}
+    external_cond_dim: ${...dataset.external_cond_dim}
+    temporal_compression_ratio: ${..vae.downsampling_factor[0]}
+    forward_window_size: ${...dataset.max_frames}
+    name: cogv
+    model_type: cogv
+    num_attention_heads: 16
+    attention_head_dim: 64
+    num_layers: 14
+    time_embed_dim: 384
+    dropout: 0.0
+    patch_size: 2
+    trainable_params: null
+    b_h_list: null
+    b_w_list: null
+    d_state: null
+    expand: null
+    headdim: null
+    share_child: null
+    attn_chunk_size: null
+    use_rotary_positional_embeddings: false
+    use_depth: false
+  diffusion:
+    strategy: diffusion-forcing
+    strategy_kwargs:
+      type: block-ssm
+      clean_noise_level: 0
+    is_continuous: false
+    mean_type: velocity
+    var_type: fixed_large
+    noise_schedule: cosine_simple
+    noise_abs_max: 20
+    rf: false
+    loss_weighting:
+      strategy: sigmoid
+      sigmoid_bias: -1.0
+    use_causal_mask: false
+    sampling_timesteps: ddim50
+    timesteps: 1000
+    scheduling_matrix: full_sequence
+    clip_noise: 20.0
+    reconstruction_guidance: 0.0
+  vae:
+    pretrained_kwargs:
+      latent_dim: ${algorithm.vae.latent_dim}
+      patch_size: 20
+      enc_dim: 1024
+      enc_depth: 5
+      enc_heads: 16
+      dec_dim: 1024
+      dec_depth: 10
+      dec_heads: 16
+      input_height: 320
+      input_width: 320
+      output_shape: b c h w
+      latent_mean:
+      - 36.0782
+      - 28.758
+      - 4.3995
+      - -12.932
+      - 5.6507
+      - -7.3454
+      - 10.7001
+      - 37.7229
+      - -13.5687
+      - -51.929
+      - -28.2122
+      - -21.1908
+      - -4.5149
+      - 17.117
+      - 51.7731
+      - -1.0934
+      latent_std:
+      - 23.9083
+      - 19.4858
+      - 21.1704
+      - 20.9667
+      - 25.746
+      - 16.2937
+      - 12.6656
+      - 23.8743
+      - 20.3804
+      - 22.2293
+      - 16.7854
+      - 26.6853
+      - 15.4976
+      - 17.6871
+      - 20.7968
+      - 31.3732
+      depth_latent_mean:
+      - 66.8737
+      - 1.3527
+      - -19.7787
+      - 12.6113
+      - 44.5108
+      - -4.4571
+      - 17.4624
+      - 57.9059
+      - 1.1405
+      - -48.1223
+      - -46.482
+      - 13.887
+      - 11.2669
+      - 10.2504
+      - 62.6954
+      - 46.3036
+      depth_latent_std:
+      - 13.5589
+      - 15.0902
+      - 14.0777
+      - 13.6187
+      - 18.4131
+      - 4.8401
+      - 8.409
+      - 14.3391
+      - 7.5189
+      - 16.7556
+      - 11.3827
+      - 17.9085
+      - 7.0004
+      - 11.5545
+      - 13.3315
+      - 21.7667
+    temporal_downsample: 1
+    use_fp16: false
+    load_ckpt: null
+    cls: mae_vit
+    pretrained_path: null
+    downsampling_factor:
+    - 1
+    - 20
+    latent_dim: 16
+    pretrained_dir:
+      mnist_world: null
+      blockworld: null
+  x_shape: ${dataset.observation_shape}
+  max_frames: ${dataset.max_frames}
+  n_frames: ${dataset.n_frames}
+  frame_skip: ${dataset.frame_skip}
+  external_cond_dim: ${dataset.external_cond_dim}
+  external_cond_stack: ${dataset.external_cond_stack}
+  latent: ${dataset.latent}
+  memory:
+    enabled: false
+    config:
+      hidden_size: 768
+      head_dim: 96
+      num_heads: 6
+      num_memories: 8
+      topk: 2
+      capacity: 1.0
+      use_layer_wise_balance: true
+      aux_loss_scale: 0.01
+      vocab_size: 32000
+      num_hidden_layers: 21
+      attn_mode: chunk
+      expand_v: 2
+      use_gate: true
+      use_short_conv: true
+      conv_size: 4
+      hidden_ratio: 4
+      intermediate_size: null
+      hidden_act: swish
+      norm_first: false
+      norm_eps: 1.0e-06
+      attn: null
+      use_cache: true
+      bos_token_id: 1
+      eos_token_id: 2
+      tie_word_embeddings: false
+      initializer_range: 0.02
+      fuse_cross_entropy: true
+      shared_mem: false
+      single_kv_proj: false
+      pad_token_id: null
+  chunk_size: -1 # used in history guidance inference
+  noise_level: random_independent
+  model_weights:
+    rgb_pretrained:
+      mnist_world_dyn: null
+      mnist_world_dyn_sw: null
+      mnist_world_dyn_sw_no_em: null
+      mnist_world_sta: null
+secrets:
+  wandb_api_key: null
+  email: null
+name: model_name

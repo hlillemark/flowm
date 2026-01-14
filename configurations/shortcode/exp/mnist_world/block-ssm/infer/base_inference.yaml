@@ -1,0 +1,53 @@
+
+# @package _global_
+
+defaults:
+
+  # common params of logging & metrics & train val settings
+  - /shortcode/exp/common 
+
+  # common params of logging & metrics & train val settings
+  - /shortcode/exp/mnist_world/block-ssm/base
+
+  # model config such as size and inference params
+  - /shortcode/model_config/ssm/100m
+
+
+
+algorithm:
+  
+  tasks:
+    prediction:
+      context_frames: 50
+    reconstruction: # Only do prediction for these val samples
+      enabled: false
+  logging:
+    max_num_videos: 8
+    metrics:
+    - fvd
+    - lpips
+    - mse
+    - psnr
+    - ssim
+
+
+dataset:
+  max_frames: 200
+  num_default_clips: 32
+
+experiment:
+  tasks: ['validation']
+  devices: "auto"
+
+  validation:
+    batch_size: 32
+    precision: 32
+    dataloader:
+      num_workers: 4
+      shuffle: false
+    splits_included: ['dynamic_validation_smallworld_no_em_200']
+    
+    # Means actually do sampling
+    sample_during_training: true
+
+

@@ -1,0 +1,24 @@
+# @package _global_
+
+defaults:
+
+  # common params of logging & metrics & train val settings
+  - exp/blockworld/block-ssm/train/base
+
+
+experiment:
+  devices: 2
+  training:
+    batch_size: 16
+
+    splits_included: ['sunday_v2_training']
+
+  validation:
+    batch_size: 8
+
+
+    splits_included: ['sunday_v2_validation']
+
+algorithm:
+  vae:
+    pretrained_path: ${algorithm.vae.pretrained_dir.blockworld}

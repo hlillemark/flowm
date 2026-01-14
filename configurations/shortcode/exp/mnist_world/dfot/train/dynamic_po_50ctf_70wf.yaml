@@ -1,0 +1,43 @@
+# @package _global_
+
+defaults:
+  - exp/common
+
+  # model config such as size and inference params
+  - model_config/cogv/100m
+
+  - /shortcode/exp/mnist_world/dfot/base
+
+algorithm:
+  varlen_context:
+    enabled: true
+    prob: 1.0 # 
+    min: 50
+    max: 50
+  
+  diffusion:
+    strategy: diffusion-forcing # diffusion-forcing
+    strategy_kwargs:
+      type: block-ssm # for diffusion forcing: original, block-ssm
+      clean_noise_level: 0 # the max noise level that applied to clean frames as a noise augmentation method
+  
+
+
+dataset:
+  max_frames: 70
+
+  num_validation_clips: 16
+  n_frames: 200
+
+experiment:
+  devices: 2
+  training:
+    batch_size: 64
+    splits_included: ['dynamic_training']
+
+  validation:
+    batch_size: 8
+
+    splits_included: ['dynamic_validation']
+
+

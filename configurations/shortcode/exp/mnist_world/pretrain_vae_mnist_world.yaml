@@ -1,0 +1,27 @@
+# @package _global_
+
+defaults:
+  - override /algorithm/vae: mae_vae_mnist_world
+
+algorithm:
+  vae:
+    pretrained_path: null
+  # New loss config for discriminator loss with lower weight. makes
+  lossconfig:
+    disc_start: 20001
+    kl_weight: 0.000001
+    disc_weight: 0.25
+
+experiment:
+  devices: "auto"
+  find_unused_parameters: true
+  training:
+    batch_size: 64
+    splits_included: ['static_training', 'dynamic_training']
+    checkpointing:
+      every_n_train_steps: 5000
+  validation:
+    batch_size: 32
+    splits_included: ['static_validation', 'dynamic_validation']
+    val_every_n_step: null
+    val_every_n_epoch: 2

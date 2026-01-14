@@ -1,0 +1,45 @@
+# @package _global_
+# Throughput config for ViTBlockworldModel (FlowViT)
+# Model has many operations called per-timestep (T_in + T_out times)
+
+experiment:
+  throughput:
+    target_attr: main_model
+    core_module_attr: null
+    warmup_steps: 16
+    eval_steps: 16
+    log_wandb_table: true
+    module_specs:
+      # Map processor components
+      - name: map_patch
+        attr: main_model.map_processor.patch
+      - name: map_pos_enc
+        attr: main_model.map_processor.map_pos_enc
+      - name: map_img_pos_enc
+        attr: main_model.map_processor.img_pos_enc
+      - name: map_update_gate
+        attr: main_model.map_processor.update_gate
+      - name: map_blocks
+        attr: main_model.map_processor.blocks
+        hook_type: sequence
+      
+      # Velocity channel mixing (Conv2d/Conv3d if enabled)
+      - name: v_channel_mixing
+        attr: main_model.v_channel_mixing
+        required: false
+      
+      # Decoder components
+      - name: decoder_pos_enc
+        attr: main_model.decoder.pos_enc
+      - name: decoder_blocks
+        attr: main_model.decoder.blocks
+        hook_type: sequence
+      - name: decoder_norm
+        attr: main_model.decoder.norm
+      - name: decoder_proj
+        attr: main_model.decoder.proj
+      
+      # Optional: action embedding (if no_self_motion_equiv=True)
+      - name: action_embedding
+        attr: main_model.action_embedding
+        required: false

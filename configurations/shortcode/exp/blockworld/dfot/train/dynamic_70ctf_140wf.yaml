@@ -1,0 +1,42 @@
+# @package _global_
+
+defaults:
+  - exp/common
+
+  # model config such as size and inference params
+  - model_config/cogv/100m
+
+  # common params of logging & metrics & train val settings
+  - exp/blockworld/dfot/base
+
+
+dataset:
+  max_frames: 140
+  n_frames: 200
+  num_validation_clips: 16
+  latent:
+    type: online
+
+experiment:
+  devices: 2
+  training:
+    batch_size: 16
+
+    splits_included: ['sunday_v2_training']
+
+  validation:
+    batch_size: 8
+
+    splits_included: ['sunday_v2_validation']
+    val_every_n_step: 2500
+
+
+algorithm:
+  tasks:
+    prediction:
+      context_frames: 70
+      history_guidance:
+        sliding_context_len: 70
+  vae:
+    pretrained_path: ${algorithm.vae.pretrained_dir.blockworld}
+

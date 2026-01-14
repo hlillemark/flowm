@@ -1,0 +1,11 @@
+# @package _global_
+
+defaults:
+  - base
+
+
+algorithm:
+  tasks:
+    prediction:
+      history_guidance:
+        sliding_context_len: 50

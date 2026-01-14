@@ -1,0 +1,95 @@
+defaults:
+  - base_algo # inherits from configurations/algorithm/base_algo.yaml
+
+lr: ${experiment.training.lr}
+calculate_throughput: ${experiment.calculate_throughput}
+training:
+  lr: ${experiment.training.lr}
+  weight_decay: ${experiment.training.weight_decay}
+  optimizer_beta: ${experiment.training.optim.optimizer_beta}
+  opt_name: ${experiment.training.optim.opt_name}
+  lr_scheduler: ${experiment.training.lr_scheduler}
+  strategy: ${experiment.training.strategy}
+  lr_map: ${experiment.training.lr_map}
+  batch_size: ${experiment.training.batch_size}
+
+validation:
+  strategy: ${experiment.validation.strategy}
+  sample_during_training: ${experiment.validation.sample_during_training}
+  batch_size: ${experiment.validation.batch_size}
+
+compile: False
+load_model_state: null
+model_state_key: "model_state"
+load_opt_state: ${.load_model_state} # default value is the same path of `load_model_state`
+opt_state_key: "optim_state"
+load_model_state_mode: strict
+handlers: null
+
+tasks:
+  prediction:
+    enabled: False
+    history_guidance:
+      name: conditional
+      keyframe_density: null
+      sliding_context_len: null
+    block_ssm:
+      keyframe_density: null
+
+  interpolation:
+    enabled: False
+    history_guidance:
+      name: conditional
+    max_batch_size: null
+  reconstruction:
+    enabled: True
+
+# NOTE: the reason why we write logging here in `algorithm` is that we define "Step behavior" in algorithm, not in experiment
+logging:
+  deterministic: 0
+  loss_freq: 100
+  grad_norm_freq: 1000 # this should be smaller than loss_freq; the `log_every_n_steps` when initializing `pl.Trainer` in `base_exp.py` is set to loss_freq, which determines the overall "base" of log freq
+  verbose_grad_info: false
+  max_num_videos: 32 # for each dataloader used in validation
+  n_metrics_frames: null
+  metrics:
+    - fvd
+    - is
+    - fid
+    - lpips
+    - mse
+    - psnr
+    - ssim
+  metrics_batch_size: 16
+  sanity_generation: False # generate video samples during sanity check
+  raw_dir: null
+  log_video_as_images:
+    enable: false
+    indices: null
+    format: pdf
+
+checkpoint:
+  reset_optimizer: False
+  strict: True
+
+scheduling_matrix: full_sequence
+external_cond_processing: ${dataset.external_cond_processing}
+
+# Training Noise Configuration
+varlen_context:
+  enabled: false
+  min: 1
+  max: 16
+uniform_future:
+  enabled: false
+fixed_context:
+  enabled: false
+  indices: null # defaults to context_frames
+  dropout: 0
+variable_context:
+  enabled: false
+  prob: 0
+  dropout: 0
+
+normalize_depth_with_log: false
+

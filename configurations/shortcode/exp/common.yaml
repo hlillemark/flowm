@@ -1,0 +1,26 @@
+# @package _global_
+
+algorithm:
+  diffusion:
+    strategy: diffusion-forcing # diffusion-forcing, matrix
+  
+  logging:
+    max_num_videos: 32 # Change this will only affect the number of videos to log, not the real number of data used in validation loop, check experiment config for that `num_validation_videos`
+    n_metrics_frames: null
+    metrics:
+      # - fvd   # when only one video we should not use fvd
+      # - is
+      # - fid   # Note: when using deepspeed_stage_2 in **training** with precision=bf16-mixed will throw error: RuntimeError: Input type (torch.cuda.FloatTensor) and weight type (CUDABFloat16Type) should be the same; DDP is fine
+      # - lpips # this will consume a lot of memory
+      - mse
+      - psnr
+      # - vbench
+      - ssim
+    metrics_batch_size: 16
+    sanity_generation: False # generate video samples during sanity check
+    raw_dir: null
+
+dataset:
+  latent:
+    enable: True # Whether to use latents
+    type: pre_sample # Type of how latents are computed

@@ -1,0 +1,25 @@
+# @package _global_
+
+experiment:
+  throughput:
+    target_attr: diffusion_model
+    core_module_attr: transformer_blocks
+    warmup_steps: 16
+    eval_steps: 16
+    log_wandb_table: true
+    module_specs:
+      - name: patch_embed
+        attr: diffusion_model.patch_embed
+      - name: depth_patch_embed
+        attr: diffusion_model.depth_patch_embed
+        required: false
+      - name: transformer_blocks
+        attr: diffusion_model.transformer_blocks
+        hook_type: sequence
+      - name: proj_out
+        attr: diffusion_model.proj_out
+      - name: norm_out
+        attr: diffusion_model.norm_out
+      - name: depth_blending_linear
+        attr: diffusion_model.depth_blending_linear
+        required: false

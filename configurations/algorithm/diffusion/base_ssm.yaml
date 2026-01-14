@@ -1,0 +1,9 @@
+# @package algorithm.diffusion
+
+defaults:
+  - base_diffusion
+
+strategy: diffusion-forcing # diffusion-forcing
+strategy_kwargs:
+  type: block-ssm # for diffusion forcing: original, block-ssm
+  clean_noise_level: 0 # the max noise level that applied to clean frames as a noise augmentation method

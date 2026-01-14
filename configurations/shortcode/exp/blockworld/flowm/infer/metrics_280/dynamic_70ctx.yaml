@@ -1,0 +1,32 @@
+# @package _global_
+
+defaults:
+  - /shortcode/exp/blockworld/flowm/infer/base_inference
+
+
+algorithm:
+  backbone:
+    v_range: 1
+    flow_vit_ablation_params:
+      v_channel_identity_emb: false
+      v_channel_maxpool_decode: true
+      v_channel_mixing_mode: "2d_v_channel_flattened"
+      no_self_motion_equiv: false
+  tasks:
+    prediction:
+      context_frames: 70
+      history_guidance:
+        sliding_context_len: 70
+    reconstruction: # Only do prediction for these val samples
+      enabled: false
+    
+dataset:
+  max_frames: 280
+  n_frames: 280
+experiment:
+  validation:
+    batch_size: 16
+    splits_included: ['sunday_v2_validation']
+
+load: ${algorithm.model_weights.flowm.blockworld.flowm.v2_dynamic}
+

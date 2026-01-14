@@ -1,0 +1,31 @@
+is_compute_node_offline: False  # many slurm systems only allows internet on login node, not compute node
+
+params:
+  partition: null
+  account: null
+  env_name: wmm2
+  num_gpus: 1 # gpus per node
+  num_cpus_per_task: 32 # cpus per gpu
+  mem_per_node: 360G # calculate as mem_per_gpu * gpus_per_node
+  time: "24:0:0" # Acceptable time formats include "minutes", "minutes:seconds", "hours:minutes:seconds", "days-hours", "days-hours:minutes" and "days-hours:minutes:seconds".
+  email: ${secrets.email}
+
+launch_template: |
+  #!/bin/bash
+
+  #SBATCH -J {name}
+  #SBATCH -o {log_dir}/out_%j.out
+  #SBATCH -e {log_dir}/error_%j.err
+  #SBATCH --mail-user={email}
+  #SBATCH --mail-type=FAIL
+  #SBATCH --account={account}
+  #SBATCH --partition={partition}
+  #SBATCH --gres=gpu:{num_gpus}
+  #SBATCH --cpus-per-task={num_cpus_per_task}
+  #SBATCH --mem-per-gpu={mem_per_gpu}
+  #SBATCH --time={time}
+
+  source ~/.bashrc
+  conda activate {env_name}
+  cd {project_root}
+  python -m main {python_args}

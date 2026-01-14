@@ -1,0 +1,13 @@
+defaults:
+  - base_pytorch_algo
+  - vae: mae_vae_blockworld
+
+logging:
+  max_video_length: 100
+  every_n_batch: 1000
+
+depth:
+  process_depth: ${dataset.use_depth}
+  depth_min: ${dataset.depth_min}
+  depth_max: ${dataset.depth_max}
+  normalize_depth_with_log: ${dataset.normalize_depth_with_log}

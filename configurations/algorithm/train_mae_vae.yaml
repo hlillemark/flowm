@@ -1,0 +1,15 @@
+defaults:
+  - base_pytorch_algo
+  - vae: mae_vae_blockworld
+
+# warmup_steps and disc_start will be halved due to GAN training
+
+warmup_steps: 10000
+gradient_clip_val: 1.0
+embed_dim: 4
+
+lossconfig:
+  disc_start: 40001
+  kl_weight: 0.000001
+  disc_weight: 0.5
+

@@ -1,0 +1,57 @@
+
+# @package _global_
+
+defaults:
+  # model config such as size and inference params
+  - /shortcode/model_config/flow_vit/flow_vit_10m
+
+  # common params of logging & metrics & train val settings
+  - /shortcode/exp/blockworld/flowm/base
+
+  - _self_
+
+
+algorithm:
+  backbone:
+    v_range: 1
+    flow_vit_ablation_params:
+      v_channel_maxpool_decode: true
+      v_channel_mixing_mode: "2d_v_channel_flattened" # one of 'none', '2d_v_channel_flattened', or '3d'
+      v_channel_identity_emb: false
+
+  tasks:
+    prediction:
+      context_frames: 70
+      history_guidance:
+        sliding_context_len: 70
+    reconstruction: # Only do prediction for these val samples
+      enabled: false
+      
+  logging:
+    max_num_videos: 8
+    metrics:
+    - fvd
+    - lpips
+    - mse
+    - psnr
+    - ssim
+
+dataset:
+  max_frames: 200
+  num_default_clips: 1000
+
+experiment:
+  tasks: ['validation']
+  devices: "auto"
+
+  validation:
+    batch_size: 128
+    precision: 32
+    dataloader:
+      num_workers: 4
+      shuffle: false
+    splits_included: ['dynamic_validation_smallworld_no_em_200']
+    # Means actually do sampling
+    sample_during_training: true
+
+

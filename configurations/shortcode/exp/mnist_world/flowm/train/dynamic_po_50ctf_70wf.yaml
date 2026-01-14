@@ -1,0 +1,39 @@
+# @package _global_
+
+
+defaults:
+  # common params of logging & metrics & train val settings
+  - /shortcode/exp/common 
+
+  # common params of logging & metrics & train val settings
+  - exp/mnist_world/flowm/base
+
+  # model config such as size and inference params
+  - /shortcode/model_config/fernn/fernn_2d_75k
+
+
+algorithm:
+  # load_model_state: downloaded_checkpoints/flowm_mnist_checkpoints/dynamic_fernn_V2_wsme.pt
+  backbone:
+    v_range: 2 
+  logging:
+    deterministic: 42
+    loss_freq: 1
+  
+  
+experiment:
+  devices: 4
+  tasks: ['training']
+  training:
+    batch_size: 8
+    max_epochs: -1
+    checkpointing:
+      every_n_train_steps: 5000
+      every_n_epochs: null
+
+    splits_included: ['dynamic_training']
+
+  validation:
+    every_n_train_steps: 1000
+    splits_included: ['dynamic_validation']
+

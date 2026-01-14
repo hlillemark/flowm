@@ -1,0 +1,31 @@
+# @package algorithm.vae
+
+defaults:
+  - base_vae
+
+cls: mae_vit
+
+pretrained_path: ${algorithm.vae.pretrained_dir.mnist_world}
+
+load_ckpt: null
+use_fp16: false
+downsampling_factor: [1, 8] # [temporal, spatial = patch_size
+
+latent_dim: 4
+
+pretrained_kwargs:
+  latent_dim: ${algorithm.vae.latent_dim}
+  patch_size: 8
+  enc_dim: 384
+  enc_depth: 4
+  enc_heads: 12
+  dec_dim: 384
+  dec_depth: 7
+  dec_heads: 12
+  input_height: 32
+  input_width: 32
+  output_shape: "b c h w"
+
+  # This is ignored during vae training
+  latent_mean: [-2.3074, -1.0932, -4.1517, -3.0909]
+  latent_std: [10.5546, 15.6741, 11.9894, 11.3444]

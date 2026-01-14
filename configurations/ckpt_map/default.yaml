@@ -1,0 +1,39 @@
+# @package _global_
+
+defaults:
+  - base_ckpt_map
+
+algorithm:
+  model_weights:
+    fernn:
+      mnist:
+        # Released paper artifact (downloaded from HF model repo).
+        # NOTE: the released FERNN FlowM checkpoint corresponds to the Dynamic Partially Observed setting.
+        dynamic_po_flowm: downloaded_checkpoints/hf_models/mnistworld-models/mnistworld/flowm-fernn/dynamic_po_flowm.pt
+    flowm:
+      blockworld:
+        flowm:
+          v2_dynamic: downloaded_checkpoints/hf_models/blockworld-models/blockworld/dynamic/flowm/v2_dynamic.ckpt
+          v2_static: downloaded_checkpoints/hf_models/blockworld-models/blockworld/static/flowm/v2_static.ckpt
+          tex: downloaded_checkpoints/hf_models/blockworld-models/blockworld/tex/flowm/tex.ckpt
+    dfot:
+      mnist: 
+        dynamic_po: downloaded_checkpoints/hf_models/mnistworld-models/mnistworld/dfot/dynamic_po.ckpt
+      blockworld:
+        v2_dynamic: downloaded_checkpoints/hf_models/blockworld-models/blockworld/dynamic/dfot/v2_dynamic.ckpt
+        v2_static: downloaded_checkpoints/hf_models/blockworld-models/blockworld/static/dfot/v2_static.ckpt
+        tex: downloaded_checkpoints/hf_models/blockworld-models/blockworld/tex/dfot/tex.ckpt
+    ssm:
+      mnist:
+        dynamic_po: downloaded_checkpoints/hf_models/mnistworld-models/mnistworld/dfot-ssm/dynamic_po.ckpt
+      blockworld:
+        v2_dynamic: downloaded_checkpoints/hf_models/blockworld-models/blockworld/dynamic/dfot-ssm/v2_dynamic.ckpt
+        v2_static: downloaded_checkpoints/hf_models/blockworld-models/blockworld/static/dfot-ssm/v2_static.ckpt
+        tex: downloaded_checkpoints/hf_models/blockworld-models/blockworld/tex/dfot-ssm/tex.ckpt
+
+  vae:
+    pretrained_dir:
+      mnist_world: downloaded_checkpoints/hf_models/mnistworld-models/mnistworld/vae/mnist_world_vae.ckpt
+      blockworld: downloaded_checkpoints/hf_models/blockworld-models/blockworld/vae/blockworld_vae.ckpt
+      blockworld_tex: downloaded_checkpoints/hf_models/blockworld-models/blockworld/vae/blockworld_tex_vae.ckpt
+

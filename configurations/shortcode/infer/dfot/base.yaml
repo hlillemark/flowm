@@ -1,0 +1,12 @@
+# @package _global_
+
+# theoretically, for different model and different dataset, this inference config should be different
+algorithm:
+  tasks:
+    prediction:
+      sampling_strategy: history_guidance
+      history_guidance:
+        name: stabilized_conditional # conditional,stabilized_conditional, vanilla, stabilized_vanilla, temporal, fractional
+        stabilization_level: 0.02
+        sliding_context_len: null # this means the model will use forward_window_size_in_tokens // 2 as its sliding context len by default
+  

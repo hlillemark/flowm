@@ -1,0 +1,21 @@
+# @package algorithm.backbone
+
+model_type: fernn # fernn, baseline
+
+name: fernn
+
+input_channels: 1
+output_channels: 1
+hidden_channels: 64
+decoder_conv_layers: 1 # Number of decoder conv layers
+world_size: 16
+window_size: 5
+
+h_kernel_size: 3
+u_kernel_size: 3
+use_mlp_decoder: false
+use_mlp_encoder: false
+v_range: 0
+cell_type: "v_channels" # # Cell type: 'v_channels' or 'action_concat'
+no_self_motion_equivariance: false
+

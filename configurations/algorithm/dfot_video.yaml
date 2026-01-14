@@ -1,0 +1,129 @@
+# Important: Be careful when modifying this file! The fields in file will be overridden by the dataset dependent config file in the `configurations/dataset_experiment` folder so consider making changes there instead! 
+
+defaults:
+  - base_pytorch_algo
+  - backbone: base_cogv
+  - diffusion: base_diffusion # is this correct?
+  - vae: mae_vae_blockworld
+  - _self_
+
+x_shape: ${dataset.observation_shape}
+max_frames: ${dataset.max_frames}
+n_frames: ${dataset.n_frames}
+frame_skip: ${dataset.frame_skip}
+external_cond_dim: ${dataset.external_cond_dim}
+external_cond_stack: ${dataset.external_cond_stack}
+latent: ${dataset.latent}
+
+backbone:
+  trainable_params: null
+
+# deprecated
+memory:
+  enabled: False
+  config:
+    hidden_size: 768
+    head_dim: 96
+    num_heads: 6
+    num_memories: 8
+    topk: 2
+    capacity: 1.0
+    use_layer_wise_balance: True
+    aux_loss_scale: 0.01
+    vocab_size: 32000
+    num_hidden_layers: 21
+    attn_mode: chunk
+    expand_v: 2
+    use_gate: True
+    use_short_conv: True
+    conv_size: 4
+    hidden_ratio: 4
+    intermediate_size: null
+    hidden_act: swish
+    norm_first: False
+    norm_eps: 1e-6
+    attn: null
+    use_cache: True
+    bos_token_id: 1
+    eos_token_id: 2
+    tie_word_embeddings: False
+    initializer_range: 0.02
+    fuse_cross_entropy: True
+    shared_mem: False
+    single_kv_proj: False
+    pad_token_id: null
+
+
+
+# sampling
+chunk_size: -1
+
+noise_level: random_independent
+
+# TODO: it's not proper to put this here
+tasks:
+  prediction:
+    enabled: True
+    # history guidance configs:
+
+    # history_guidance:
+    #   name: stabilized_vanilla # conditional,stabilized_conditional, vanilla, stabilized_vanilla, temporal, fractional
+    #   guidance_scale: 5.0
+    #   stabilization_level: 0.02
+    # history_guidance:
+    #   name: stabilized_conditional # conditional,stabilized_conditional, vanilla, stabilized_vanilla, temporal, fractional
+    #   stabilization_level: 1
+    #   freq_scale: 0.6
+    history_guidance:
+      name: stabilized_conditional # conditional,stabilized_conditional, vanilla, stabilized_vanilla, temporal, fractional
+      stabilization_level: 0.02
+    # history_guidance:
+    #   name: fractional # conditional,stabilized_conditional, vanilla, stabilized_vanilla, temporal, fractional
+    #   freq_scale: 1.0
+    #   guidance_scale: 5.0
+
+      keyframe_density: null
+      sliding_context_len: null
+
+    # Oasis config:
+    oasis:
+      mode: tf
+      cfg_scale: 5
+      stabilization_level: 0
+      gen_fr_num: 64
+
+    # Shared config
+    context_frames: 16
+    sampling_strategy: oasis
+  interpolation:
+    enabled: False
+    history_guidance:
+      name: conditional
+    max_batch_size: null
+  reconstruction:
+    enabled: True
+
+compile: False
+
+
+
+# NOTE: the reason why we write logging here in `algorithm` is that we define "Step behavior" in algorithm, not in experiment
+logging:
+  deterministic: 42
+  loss_freq: 100
+  grad_norm_freq: 1000 # DON'T set to small, otherwise it will slow down training!
+  max_num_videos: 32 # Change this will only affect the number of videos to log, not the real number of data used in validation loop, check experiment config for that `num_validation_videos`
+  n_metrics_frames: null
+  metrics:
+    - fvd
+    - is
+    # - fid
+    # - lpips # this will consume a lot of memory
+    - mse
+    - psnr
+    # - vbench
+    # - ssim
+  metrics_batch_size: 16
+  sanity_generation: True # generate video samples during sanity check
+  raw_dir: null
+  

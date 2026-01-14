@@ -1,0 +1,13 @@
+# @package _global_
+
+defaults:
+  - /shortcode/exp/mnist_world/flowm/infer/base_inference
+
+
+algorithm:
+  load_model_state: ${algorithm.model_weights.fernn.mnist.dynamic_po_flowm}
+
+
+experiment:
+  validation:
+    splits_included: ['dynamic_validation_200']

@@ -1,0 +1,37 @@
+# @package _global_
+
+defaults:
+
+  # common params of logging & metrics & train val settings
+  - /shortcode/exp/common
+
+  - /shortcode/exp/mnist_world/block-ssm/base
+  
+  - /shortcode/model_config/ssm/100m
+
+dataset:
+  max_frames: 70
+  # num_training_videos: 100000
+  num_validation_clips: 16
+  n_frames: 200
+  latent:
+    type: online
+
+algorithm:
+  varlen_context:
+    enabled: true
+    prob: 1.0 # 
+    min: 50
+    max: 50
+  
+experiment:
+  devices: 2
+  training:
+    batch_size: 64
+
+    splits_included: ['dynamic_training']
+
+  validation:
+    batch_size: 8
+
+    splits_included: ['dynamic_validation']

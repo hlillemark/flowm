@@ -1,0 +1,29 @@
+# @package _global_
+
+defaults:
+  - /shortcode/exp/blockworld/flowm/infer/base_inference
+
+
+
+dataset:
+  max_frames: 140
+  n_frames: 140
+
+
+experiment:
+  devices: "auto"
+  validation:
+    batch_size: 16
+    splits_included: ['tex_validation']
+
+algorithm:
+  tasks:
+    prediction:
+      context_frames: 70
+      history_guidance:
+        sliding_context_len: 70
+    reconstruction: # Only do prediction for these val samples
+      enabled: false
+
+
+load: ${algorithm.model_weights.flowm.blockworld.flowm.tex}

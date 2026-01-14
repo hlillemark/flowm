@@ -1,0 +1,36 @@
+# @package _global_
+
+defaults:
+  - /shortcode/exp/blockworld/block-ssm/infer/base_inference
+
+
+
+dataset:
+  max_frames: 280
+  n_frames: 280
+  num_default_clips: 1000
+
+algorithm:
+  backbone:
+    forward_window_size: 140
+
+  tasks:
+    prediction:
+      context_frames: 70
+      history_guidance:
+        sliding_context_len: 70
+    reconstruction: # Only do prediction for these val samples
+      enabled: false
+
+  vae:
+    pretrained_path: ${algorithm.vae.pretrained_dir.blockworld_tex}
+
+experiment:
+  devices: "auto"
+  validation:
+    batch_size: 16
+    splits_included: ['tex_validation']
+
+load: ${algorithm.model_weights.ssm.blockworld.tex}
+
+

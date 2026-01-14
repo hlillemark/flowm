@@ -1,0 +1,39 @@
+# @package _global_
+
+defaults:
+  # model config such as size and inference params
+  - /shortcode/model_config/flow_vit/flow_vit_10m
+
+  # common params of logging & metrics & train val settings
+  - exp/blockworld/flowm/base
+
+  - _self_
+
+algorithm:
+  teacher_forcing: 0.125
+
+  # ABLATION PARAMS:
+  backbone:
+    v_range: 1
+    flow_vit_ablation_params:
+      v_channel_maxpool_decode: true
+      v_channel_mixing_mode: "2d_v_channel_flattened" # one of 'none', '2d_v_channel_flattened', or '3d'
+      v_channel_identity_emb: false
+
+  tasks:
+    prediction:
+      context_frames: 50
+
+experiment:
+  devices: 2
+  training:
+    batch_size: 8
+    splits_included: ['sunday_v2_training']
+  
+  validation:
+    batch_size: 8
+    splits_included: ['sunday_v2_validation']
+
+dataset:
+  external_cond_dim: 5 # 0, 1, 2 : left, right, forward, bwd, pick up (noop). fwd, bwd are not used 
+  max_frames: 140

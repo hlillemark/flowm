@@ -1,0 +1,70 @@
+# @package _global_
+
+
+defaults:
+
+  - _self_
+
+dataset:
+  max_frames: 70
+  latent:
+    enable: false
+    type: online
+  num_default_clips: 4
+
+algorithm:
+  teacher_forcing: 0.0
+  backbone:
+    window_size: 32
+    world_size: 50
+    hidden_channels: 64
+
+  tasks:
+    prediction:
+      context_frames: 50
+
+experiment:
+  calculate_throughput: false
+  devices: [0]
+  ema:
+    enable: false
+  training:
+    batch_size: 16
+    lr: 1e-4
+    strategy: ddp #deepspeed_stage_2
+    precision: 32-true # must use this if deepspeed_stage_2
+    dataloader:
+      num_workers: 8
+      shuffle: True
+
+    max_epochs: -1
+
+    checkpointing:
+      every_n_train_steps: null
+      every_n_epochs: 1
+    optim:
+      optimizer_beta: [0.9, 0.999]
+      gradient_clip_val: 1.0
+      opt_name: adam
+    weight_decay: 0
+    lr_scheduler:
+      name: constant
+
+    compile: ${algorithm.compile}
+    splits_included: ['dynamic_training']
+
+  validation:
+    batch_size: 1
+    precision: 32-true
+    val_every_n_step: 1000 # if set to float, then it means [0.0, 1.0] fraction of training steps; otherwise, it means fixed number of training steps
+    val_every_n_epoch: null
+    limit_batch: 1.0
+    dataloader:
+      num_workers: 4
+      shuffle: false
+
+    num_sanity_val_steps: 1
+    splits_included: ['dynamic_validation']
+    sample_during_training: true
+
+  find_unused_parameters: true

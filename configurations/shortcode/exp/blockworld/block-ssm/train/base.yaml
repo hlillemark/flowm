@@ -1,0 +1,31 @@
+# @package _global_
+
+defaults:
+
+  # common params of logging & metrics & train val settings
+  - /shortcode/exp/common 
+
+  - /shortcode/exp/blockworld/block-ssm/base
+  
+  - /shortcode/model_config/ssm/100m
+
+
+
+
+dataset:
+  max_frames: 140
+
+  num_validation_clips: 16
+  n_frames: 140
+  latent:
+    type: online
+
+algorithm:
+  varlen_context:
+    enabled: true
+    prob: 1.0 # 
+    min: 70
+    max: 70
+  
+
+

@@ -1,0 +1,28 @@
+# @package _global_
+
+defaults:
+  - /shortcode/exp/blockworld/dfot/infer/base_inference
+
+
+dataset:
+  max_frames: 140
+  n_frames: 140
+
+algorithm:
+
+  tasks:
+    prediction:
+      context_frames: 70
+      history_guidance:
+        sliding_context_len: 70
+  vae:
+    pretrained_path: ${algorithm.vae.pretrained_dir.blockworld_tex}
+
+experiment:
+  devices: "auto"
+  validation:
+    batch_size: 32
+    splits_included: ['tex_validation']
+
+
+load: ${algorithm.model_weights.dfot.blockworld.tex}

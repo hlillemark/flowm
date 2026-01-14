@@ -1,0 +1,23 @@
+# @package algorithm.vae
+
+defaults:
+  - base_vae
+
+cls: mae_vit
+
+# pretrained_path: null
+
+load_ckpt: null
+use_fp16: false
+latent_dim: 16
+patch_size: 20
+enc_dim: 1024
+enc_depth: 6
+enc_heads: 16
+dec_dim: 1024
+dec_depth: 12
+dec_heads: 16
+input_height: 360
+input_width: 640
+downsampling_factor: [1, 20] # [temporal, spatial = patch_size
+output_shape: "b c h w"

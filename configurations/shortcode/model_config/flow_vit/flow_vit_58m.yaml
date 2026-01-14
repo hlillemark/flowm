@@ -1,0 +1,16 @@
+# @package _global_
+
+
+defaults:
+
+  - override /algorithm/backbone: flow_vit
+
+  - _self_
+
+algorithm:
+  backbone:
+    hidden_channels: 512
+    patch_size: 16
+    decoder_depth: 8
+    num_heads: 16
+    map_proc_encoder_depth: 8

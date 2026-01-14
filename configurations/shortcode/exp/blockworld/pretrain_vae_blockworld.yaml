@@ -1,0 +1,33 @@
+# @package _global_
+
+defaults:
+  - override /algorithm/vae: mae_vae_blockworld
+
+algorithm:
+  # vae:
+  #   pretrained_path: ${algorithm.vae.pretrained_dir.blockworld}
+  # New loss config for discriminator loss with lower weight. makes
+  lossconfig:
+    disc_start: 1
+    kl_weight: 0.000001
+    disc_weight: 0.25
+
+experiment:
+  devices: "auto"
+  find_unused_parameters: true
+  training:
+    batch_size: 4
+    splits_included: ['tex_training']
+    checkpointing:
+      every_n_train_steps: 5000
+  validation:
+    batch_size: 4
+    splits_included: ['tex_validation']
+    val_every_n_step: 2500
+    val_every_n_epoch: null
+    shuffle: true
+
+dataset:
+# Current behavior actually just gets one clip per video..
+  max_frames: 80
+

@@ -1,0 +1,38 @@
+# Important: Be careful when modifying this file! 
+# The fields in file will be overridden by the dataset dependent config file in the `configurations/dataset_experiment` folder so consider making changes there instead! 
+
+defaults:
+  - base_video
+
+name: mnist_world
+
+save_dir: data/mnist_world
+max_frames: 70
+frame_skip: 1
+resolution: [32, 32]
+external_cond_dim: 2
+transform_type: pad
+
+num_validation_clips: 16
+
+latent:
+  type: online
+
+env:
+  training: all
+  validation: all
+
+external_cond_processing: mask_first # the first action of the sequence is masked, as action_t is expected to produce frame_t, based on the frame_t-1; So the first action has no context
+
+use_depth: False
+
+cond_alignment: "t-1->t" # "t->t+1" or "t-1->t", this means the way we use the cond to train the model 
+data_cond_alignment: "t-1->t" # "t->t+1" or "t-1->t", this means the how is the cond stored in the dataset files
+
+cond_loading_style: "relative_pos_offset"
+
+# FERNN
+seq_len: 50
+target_seq_len: 20
+random_window: false
+min_total_len: null

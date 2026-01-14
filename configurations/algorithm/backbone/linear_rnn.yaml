@@ -1,0 +1,10 @@
+# @package algorithm.backbone
+
+defaults:
+- base_fernn
+
+name: linear_rnn
+
+input_channels: 1
+output_channels: 1
+use_mlp_decoder: false

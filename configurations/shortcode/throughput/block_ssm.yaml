@@ -1,0 +1,36 @@
+# @package _global_
+# Throughput config for CogVideoHybridSSM (Block SSM model)
+# Model structure: patch_embed -> transformer_blocks (Mamba2 + FlexAttention) -> norm_out -> proj_out
+
+experiment:
+  throughput:
+    target_attr: diffusion_model
+    core_module_attr: transformer_blocks
+    warmup_steps: 16
+    eval_steps: 16
+    log_wandb_table: true
+    module_specs:
+      # Initial embeddings
+      - name: agent_pos_embedding
+        attr: diffusion_model.agent_pos_embedding
+      - name: patch_embed
+        attr: diffusion_model.patch_embed
+      
+      # Transformer blocks (sequence of CogVideoXBlock with Mamba2 + Attention)
+      - name: transformer_blocks
+        attr: diffusion_model.transformer_blocks
+        hook_type: sequence
+      
+      # # Per-block components (first block as example)
+      # - name: block0_mamba
+      #   attr: diffusion_model.transformer_blocks.0.mamba
+      # - name: block0_attn
+      #   attr: diffusion_model.transformer_blocks.0.attn
+      # - name: block0_ff
+      #   attr: diffusion_model.transformer_blocks.0.ff
+      
+      # Output projection
+      - name: norm_out
+        attr: diffusion_model.norm_out
+      - name: proj_out
+        attr: diffusion_model.proj_out

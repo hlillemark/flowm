@@ -1,0 +1,77 @@
+# @package _global_
+
+defaults:
+  - /shortcode/infer/block-ssm/blockworld
+
+  # diffusion algorithm
+  - override /algorithm/diffusion: base_ssm 
+
+  # VAE
+  - override /algorithm/vae: mae_vae_blockworld
+
+  - _self_
+
+dataset:
+  max_frames: 70
+  latent:
+    type: online
+
+algorithm:
+  tasks:
+    prediction:
+      context_frames: 50
+
+  # From "Long-Context State-Space Video World Models" Paper
+  # We employ our long-context training regime during all stages and for all models. Using a ratio of p = 0.5, 
+  # we sample a random length prefix of the frame sequence to keep un-noised. 
+  # The length of the prefix must exceed half of the total length of the training sequence to further encourage long-context training. 
+  # When we don’t sample a prefic, we keep all tokens noised, in this case, training is the same as diffusion forcing.
+  varlen_context:
+    enabled: true
+    prob: 0.5 # 
+    min: ${eval:'${dataset.max_frames} // 2 + 1'}
+    max: ${dataset.max_frames}
+
+experiment:
+  devices: "auto"
+  training:
+    batch_size: 32
+    lr: 2e-4
+    strategy: ddp #deepspeed_stage_2
+    precision: bf16 # must use this if deepspeed_stage_2
+    dataloader:
+      num_workers: 8
+      shuffle: True
+
+    max_epochs: -1
+
+    checkpointing:
+      every_n_train_steps: 5000
+      every_n_epochs: null
+      save_top_k: -1
+    optim:
+      optimizer_beta: [0.9, 0.99]
+      gradient_clip_val: 1.0
+    weight_decay: 1e-3
+    lr_scheduler:
+      name: constant_with_warmup
+      num_warmup_steps: 2000
+
+    compile: ${algorithm.compile}
+    splits_included: ['training']
+
+  validation:
+    batch_size: 4
+    precision: 32
+    val_every_n_step: 5000 # if set to float, then it means [0.0, 1.0] fraction of training steps; otherwise, it means fixed number of training steps
+    val_every_n_epoch: null
+    limit_batch: 1.0
+    dataloader:
+      num_workers: 4
+      shuffle: false
+
+    num_sanity_val_steps: 1
+    splits_included: ['validation']
+    sample_during_training: true
+
+  find_unused_parameters: true

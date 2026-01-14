@@ -1,0 +1,74 @@
+# @package _global_
+
+
+dataset:
+  # IMPORTANT: Blockworld dataset follows data_cond_alignment: t -> t+1, but 
+  # cond alignment for the model should be t-1 to t. need to set this properly to load conds
+  cond_alignment: "t-1->t"
+  max_frames: 70
+  # Load a 200 length video for validation purposes
+  n_frames: 200
+
+  # IMPORTANT: Blockworld dataset loads one hot embedding, but we would like to load it via integers instead
+  cond_loading_style: "action_int"
+  latent:
+    enable: false
+    type: online
+
+algorithm:
+  backbone:
+    window_size: 5
+    world_size: 16
+
+  tasks:
+    prediction:
+      context_frames: 50
+
+  logging:
+    loss_freq: 10
+
+experiment:
+  devices: [0]
+  ema:
+    enable: false
+  training:
+    batch_size: 16
+    lr: 1e-4
+    strategy: ddp #deepspeed_stage_2
+    precision: 32-true 
+    dataloader:
+      num_workers: 8
+      shuffle: True
+
+    max_epochs: -1
+
+    checkpointing:
+      every_n_train_steps: 5000
+      every_n_epochs: null
+    optim:
+      optimizer_beta: [0.9, 0.99]
+      gradient_clip_val: 1.0
+      opt_name: adamw
+    weight_decay: 1e-3
+    lr_scheduler:
+      name: constant
+
+    compile: ${algorithm.compile}
+    splits_included: ['static_training']
+
+  validation:
+    batch_size: 1
+    precision: 32-true
+
+    val_every_n_step: 500
+    val_every_n_epoch: null
+    limit_batch: 1.0
+    dataloader:
+      num_workers: 4
+      shuffle: false
+
+    num_sanity_val_steps: 1
+    splits_included: ['static_validation']
+    sample_during_training: true
+
+  # find_unused_parameters: true

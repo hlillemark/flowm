@@ -1,0 +1,52 @@
+# Important: Be careful when modifying this file! The fields in file will be overridden by the dataset dependent config file in the `configurations/dataset_experiment` folder so consider making changes there instead! 
+
+defaults:
+  - base_pytorch_algo
+  - backbone: base_fernn
+  - vae: mae_vae_blockworld # just placeholder
+  - _self_
+
+x_shape: ${dataset.observation_shape}
+max_frames: ${dataset.max_frames}
+n_frames: ${dataset.n_frames}
+frame_skip: ${dataset.frame_skip}
+external_cond_dim: ${dataset.external_cond_dim}
+external_cond_stack: ${dataset.external_cond_stack}
+latent: ${dataset.latent}
+
+backbone:
+  trainable_params: null
+
+
+tasks:
+  prediction:
+    enabled: True
+    # Shared config
+    context_frames: 50
+  interpolation:
+    enabled: False
+  reconstruction:
+    enabled: False
+
+compile: False
+
+# NOTE: the reason why we write logging here in `algorithm` is that we define "Step behavior" in algorithm, not in experiment
+logging:
+  deterministic: 42
+  loss_freq: 100
+  grad_norm_freq: 1000 # DON'T set to small, otherwise it will slow down training!
+  max_num_videos: 32 # Change this will only affect the number of videos to log, not the real number of data used in validation loop, check experiment config for that `num_validation_videos`
+  n_metrics_frames: null
+  metrics:
+    # - fvd
+    # - is
+    # - fid
+    # - lpips # this will consume a lot of memory
+    - mse
+    - psnr
+    # - vbench
+    # - ssim
+  metrics_batch_size: 16
+  sanity_generation: True # generate video samples during sanity check
+  raw_dir: null
+  

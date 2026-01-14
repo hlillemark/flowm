@@ -1,0 +1,34 @@
+# @package algorithm.diffusion
+
+strategy: diffusion-forcing
+strategy_kwargs:
+  type: original # for diffusion forcing: original, block-ssm
+  clean_noise_level: 0 # the max noise level that applied to clean frames as a noise augmentation method
+
+is_continuous: false
+
+
+# diffusion learning objective
+mean_type: velocity # xstart, epsilon, velocity
+var_type: fixed_large # fixed_large, fixed_small, learned_range
+
+noise_schedule: cosine_simple
+noise_abs_max: 20
+
+# method
+rf: false
+
+# loss weighting
+loss_weighting:
+  strategy: sigmoid
+  sigmoid_bias: -1.0
+
+use_causal_mask: false
+
+sampling_timesteps: ddim50
+timesteps: 1000
+
+scheduling_matrix: full_sequence
+clip_noise: 20.0
+# (For full sequence diffusion)
+reconstruction_guidance: 0.0

@@ -1,0 +1,27 @@
+# Important: Be careful when modifying this file! 
+# The fields in file will be overridden by the dataset dependent config file in the `configurations/dataset_experiment` folder so consider making changes there instead! 
+
+
+defaults:
+  - base_pytorch_exp
+
+tasks: [validation]
+
+training:
+  dataloader:
+    shuffle: False
+  batch_size: 2
+  splits_included: ['training']
+
+validation:
+  precision: 16-true
+  batch_size: 8
+  dataloader:
+    shuffle: False
+  splits_included: ['training']
+  devices: "auto"
+  is_preprocessing_expt: true
+
+test:
+  batch_size: ${experiment.batch_size}
+

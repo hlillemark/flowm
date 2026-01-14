@@ -1,0 +1,12 @@
+# @package _global_
+
+
+defaults:
+  - base # base fernn is 75K
+
+
+algorithm:
+  backbone:
+    v_range: 0
+    cell_type: "v_channels" # # Cell type: 'v_channels' or 'action_concat'
+    no_self_motion_equivariance: true

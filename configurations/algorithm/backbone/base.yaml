@@ -1,0 +1,22 @@
+# @package algorithm.backbone
+
+in_channels: ${..vae.latent_dim}
+out_channels: ${..vae.latent_dim}
+external_cond_dim: ${...dataset.external_cond_dim} 
+
+
+temporal_compression_ratio: ${..vae.downsampling_factor[0]}
+
+# `forward_window_size` determines the forward context window of the model.
+# 
+# - During training:
+#     Set this to the number of frames used in training, typically `dataset.max_frames`.
+#
+# - During inference:
+#     If generating sequences longer than the training window,
+#     DO NOT set this to `dataset.max_frames`.
+#     Instead, use the original training window size (e.g., 32, 128, or 400).
+
+forward_window_size: ${...dataset.max_frames} 
+
+use_depth: ${...dataset.use_depth}

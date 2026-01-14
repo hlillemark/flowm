@@ -1,0 +1,25 @@
+# @package _global_
+
+defaults:
+  - /shortcode/exp/blockworld/block-ssm/infer/base_inference
+
+
+
+dataset:
+  max_frames: 280
+  n_frames: 280
+
+algorithm:
+  tasks:
+    prediction:
+      context_frames: 70
+      history_guidance:
+        sliding_context_len: 70
+experiment:
+  devices: "auto"
+  validation:
+    batch_size: 16
+    splits_included: ['sunday_v2_static_validation']
+
+
+load: ${algorithm.model_weights.ssm.blockworld.v2_static}

@@ -1,0 +1,22 @@
+# @package _global_
+
+# python -m main shortcode=preprocess/preprocess_blockworld +name=preprocess_latent_blockworld algorithm=mae_vit_vae_preprocessor experiment=video_latent_preprocessing dataset=blockworld ckpt_map=default ignore_cfg_validation=true
+
+defaults:
+  # absolute override from the configurations path.
+  - override /algorithm/vae: mae_vae_blockworld
+
+dataset:
+  # Must set to max number of frames
+  max_frames: 500
+  # Preprocess depth or not
+  use_depth: False
+  # Otherwise it will try loading latents that do not exist, depending on default config
+  latent:
+    enable: False
+
+experiment:
+  devices: "auto"
+  validation:
+    batch_size: 4
+    splits_included: ['tex_training', 'tex_validation']

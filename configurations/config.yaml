@@ -1,0 +1,30 @@
+# configuration parsing starts here
+defaults:
+  - _self_
+  - experiment: video_generation # experiment yaml file name in configurations/experiments folder 
+  - dataset: blockworld # dataset yaml file name in configurations/dataset folder
+  - algorithm: dfot_video # algorithm yaml file name in configurations/algorithm folder
+  - cluster: null # optional, cluster yaml file name in configurations/cluster folder. Leave null for local compute
+  - optional shortcode: null # optional, but recommended for usage; each shortcode.yaml is basically correponding to an expr.
+  - optional secrets: my_secrets
+  - ckpt_map: null # mapping to the location of checkpoints on this server
+
+debug: false # global debug flag will be passed into configuration of experiment, dataset and algorithm
+
+wandb:
+  entity: null # wandb account name / organization name 
+  project: null # wandb project name; if not provided, defaults to root folder name 
+  mode: dryrun # set wandb logging to online, offline or dryrun
+  api_key: ${secrets.wandb_api_key}
+
+resume: null # wandb run id to resume logging
+load: null # path to local checkpoint file to load weights and optimizer state from
+# flag whether to manually requeue from a stopped checkpoint. 
+# requeue requires a symlink at ./outputs/.requeue_links/manual_requeue_location or ./outputs/.requeue_links/SLURM_JOB_ID
+#     and that symlink should point to the location of the run outputs. That location will include a 
+#     metadata yaml file that includes the wandb id and the interrupted checkpoint path
+requeue: null
+
+skip_download: true # skip downloading checkpoint from wandb
+
+ignore_cfg_validation: false

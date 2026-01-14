@@ -1,0 +1,21 @@
+# @package _global_
+
+# broken for now
+
+defaults:
+  - base
+
+algorithm:
+
+  backbone:
+    num_layers: 14
+    b_h_list: [1, 1, 1, 1, 2, 2, 4, 8]
+    b_w_list: [1, 1, 1, 1, 2, 2, 4, 8]
+    headdim: 16
+    expand: 0.125
+    d_state: 32
+    attn_chunk_size: 4 # in the paper they use 5 / 10, but due to some divisibility issue of mamba, we use 4 here. "we chose a frame window size of k = 10. For faster training and sampling speeds, we group frames into chunks of 5."
+    time_embed_dim: 384
+    dropout: 0.0
+  
+    model_type: hybrid_ssm

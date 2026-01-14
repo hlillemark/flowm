@@ -1,0 +1,11 @@
+# @package _global_
+
+defaults:
+  - /shortcode/exp/mnist_world/block-ssm/infer/base_inference
+
+
+experiment:
+  validation:
+    splits_included: ['dynamic_validation_200']
+
+load: ${algorithm.model_weights.ssm.mnist.dynamic_po}

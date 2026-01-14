@@ -1,0 +1,33 @@
+# @package algorithm.vae
+
+defaults:
+  - base_vae
+
+cls: mae_vit
+
+pretrained_path: ${algorithm.vae.pretrained_dir.blockworld}
+
+load_ckpt: null
+use_fp16: false
+downsampling_factor: [1, 16] # [temporal, spatial = patch_size
+
+latent_dim: 8
+
+pretrained_kwargs:
+  latent_dim: ${algorithm.vae.latent_dim}
+  patch_size: 16
+  enc_dim: 576
+  enc_depth: 5
+  enc_heads: 12
+  dec_dim: 576
+  dec_depth: 15
+  dec_heads: 12
+  input_height: 128
+  input_width: 128
+  output_shape: "b c h w"
+
+  # This is ignored during vae training
+  # VAE for SUNDAY V2
+  # ljhpew6d
+  latent_mean: [6.0317, -2.8679, 2.214, 7.5799, -2.9073, 2.7251, -0.2047, 0.957]
+  latent_std: [8.4139, 7.2656, 6.8299, 5.8843, 9.7298, 7.0157, 6.9819, 7.141]

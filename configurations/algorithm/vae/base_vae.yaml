@@ -1,0 +1,6 @@
+# @package algorithm.vae
+
+pretrained_kwargs: {}
+temporal_downsample: 1 # means Image VAE
+use_fp16: false
+load_ckpt: null # reinitialize the model, (deprecated)

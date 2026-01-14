@@ -1,0 +1,34 @@
+# @package _global_
+
+
+algorithm:
+  model_weights:
+    fernn:
+      mnist:
+        dynamic_po_flowm: null
+    flowm:
+      blockworld:
+        flowm:
+          v2_dynamic: null
+          v2_static: null
+          tex: null
+    dfot:
+      mnist: 
+        dynamic_po: null
+      blockworld:
+        v2_dynamic: null
+        v2_static: null
+        tex: null
+    ssm:
+      mnist:
+        dynamic_po: null
+      blockworld:
+        v2_dynamic: null
+        v2_static: null
+        tex: null
+
+  vae:
+    pretrained_dir:
+      mnist_world: null
+      blockworld: null
+      blockworld_tex: null

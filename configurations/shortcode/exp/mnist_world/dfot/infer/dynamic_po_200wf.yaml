@@ -1,0 +1,13 @@
+# @package _global_
+
+defaults:
+  - /shortcode/exp/mnist_world/dfot/infer/base_inference
+
+
+
+
+experiment:
+  validation:
+    splits_included: ['dynamic_validation_200']
+
+load: ${algorithm.model_weights.dfot.mnist.dynamic_po}

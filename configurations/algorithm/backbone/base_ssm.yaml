@@ -1,0 +1,16 @@
+# @package algorithm.backbone
+
+defaults:
+  - base
+  - base_cogv
+
+model_type: hybrid_ssm_official
+
+b_h_list: [1, 1, 1, 1, 2, 2, 4, 8]
+b_w_list: [1, 1, 1, 1, 2, 2, 4, 8]
+headdim: 128
+expand: 2
+d_state: 256
+share_child: True
+
+use_rotary_positional_embeddings: True # For block ssm model, this means we won't have any pe enabled (the code didn't really use RoPE)

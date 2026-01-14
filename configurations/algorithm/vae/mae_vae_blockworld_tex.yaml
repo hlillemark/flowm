@@ -1,0 +1,11 @@
+# @package algorithm.vae
+
+defaults:
+  - mae_vae_blockworld
+
+pretrained_kwargs:
+  # This is ignored during vae training
+  # VAE for TEX, and also can work for SUNDAY V2
+  # t6sedz7b
+  latent_mean: [6.9085, -3.8265, 4.3579, 6.2365, 0.0131, 3.0477, 1.2732, -0.0547]
+  latent_std: [9.9268, 7.8357, 9.1883, 6.9013, 11.5482, 6.9247, 7.4618, 7.6142]

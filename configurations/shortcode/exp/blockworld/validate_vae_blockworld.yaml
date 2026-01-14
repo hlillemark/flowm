@@ -1,0 +1,36 @@
+# @package _global_
+
+defaults:
+  - override /algorithm/vae: mae_vae_blockworld
+
+algorithm:
+
+  # New loss config for discriminator loss with lower weight. makes
+  lossconfig:
+    disc_start: 20001
+    kl_weight: 0.000001
+    disc_weight: 0.25
+
+experiment:
+  tasks: ['validation']
+  devices: "auto"
+  find_unused_parameters: true
+  training:
+    batch_size: 4
+    splits_included: ['training', 'futureproof', 'futureproof_evenlighting']
+    checkpointing:
+      every_n_train_steps: 5000
+  validation:
+    batch_size: 2
+    splits_included: ['edge_plus_validation']
+    val_every_n_step: null
+    val_every_n_epoch: 1
+    shuffle: true
+
+dataset:
+# Current behavior actually just gets one clip per video..
+  # num_training_clips: 60000
+  # num_futureproof_clips: 20000
+  # num_futureproof_evenlighting_clips: 20000
+  default_num_clips: 32
+  max_frames: 100

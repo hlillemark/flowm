@@ -1,0 +1,55 @@
+# Important: Be careful when modifying this file! 
+# The fields in file will be overridden by the dataset dependent config file in the `configurations/dataset_experiment` folder so consider making changes there instead! 
+
+defaults:
+  - base_dataset
+
+# Directory where the dataset is stored
+save_dir: ???
+
+# Latent Configuration
+latent:
+  enable: True # Whether to use latents
+  type: pre_sample # Type of how latents are computed
+  # pre_sample: preprocess latents as samples, online: compute latents online (not saved)
+  suffix: null # latents are saved at ${save_dir}_${latent.suffix} folder
+  downsampling_factor: ${algorithm.vae.downsampling_factor} # [temporal, spatial] downsampling factor for latents
+  # (e.g. [4, 8] if 17x128x128 to 5x16x16)
+  num_channels:  ${algorithm.vae.latent_dim}  # number of channels for the latent representation
+  is_preprocessing_expt: ${experiment.validation.is_preprocessing_expt} # are we currently doing a preprocessing expt
+# Configuration for lengths and shapes
+
+downsampling_factor: ${algorithm.vae.downsampling_factor}
+
+resolution: [640, 360] # Resolution of frames of videos in the dataset
+observation_shape: [3, "${dataset.resolution[1]}", "${dataset.resolution[0]}"] # (c, h, w)
+max_frames: null # Number of frames to be used for training
+n_frames: ${dataset.max_frames} # Number of frames to be used for generating videos
+frame_skip: 1 # Stride for sampling frames
+filter_min_len: null # Only for validatio. filters out validation videos shorter than this cfg. A null value defaults to self.n_frames, and filter by its value otherwise 
+# External conditioning configuration
+external_cond_dim: 0 # Dimension of external conditioning, 0 if no external conditioning
+external_cond_stack: false # Whether to stack external conditioning across skipped frames
+external_cond_processing: null # How to process external conditioning
+# Data loading configuration
+preload: false # Preload the dataset into CPU memory for faster data loading
+subdataset_size: null # A dataset is split into subdatasets of this size if not null
+
+cond_alignment: "t->t+1" # "t->t+1" or "t-1->t", this means the way we use the cond to train the model 
+data_cond_alignment: "t->t+1" # "t->t+1" or "t-1->t", this means the how is the cond stored in the dataset files
+
+# Number of clips to be used for training and validation, or other splits
+num_validation_clips: null # Number of video clips to be used for evaluation, setting this ensures that evaluation clips are consistent across runs
+num_training_clips: null # Number of video clips to be used for training, setting this ensures that training clips are consistent across runs
+num_default_clips: 8
+
+transform_type: pad
+
+# Default option for all datasets.
+cond_loading_style: "one_hot"
+
+training_splits: ${experiment.training.splits_included}
+validation_splits: ${experiment.validation.splits_included}
+
+
+path_list: null

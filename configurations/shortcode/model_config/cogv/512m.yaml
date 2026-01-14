@@ -1,0 +1,13 @@
+# @package _global_
+
+defaults:
+  - base
+
+
+# 512M
+algorithm:
+  backbone:
+    num_attention_heads: 20
+    attention_head_dim: 64
+    num_layers: 20
+    time_embed_dim: 384
