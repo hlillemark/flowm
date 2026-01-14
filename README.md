@@ -1,4 +1,22 @@
-# Flow Equivariant World Models (FloWM)
+<h1 align="center"> Flow Equivariant World Models</h1>
+<p align="center">
+  <p align="center">
+    <a href="https://hansenlillemark.com/">Hansen Jin Lillemark*<sup>1, 2</sup></a>
+    ·
+    <a href="https://huskydoge.github.io/">Benhao Huang*<sup>3</sup></a>
+    ·
+    <a href="https://fnzhan.com/">Fangneng Zhan<sup>1</sup></a>
+    ·
+    <a href="https://yilundu.github.io/">Yilun Du<sup>1</sup></a>
+    ·
+    <a href="https://akandykeller.github.io/">T. Anderson Keller<sup>1</sup></a>
+    ·
+    <br/>
+    *Equal contribution <sup>1</sup>Harvard <sup>2</sup>UC San Diego <sup>3</sup>Carnegie Mellon University
+  </p>
+  <h3 align="center"><a href="https://arxiv.org/abs/2601.01075">Paper</a> | <a href="https://flowequivariantworldmodels.github.io/">Website</a> | <a href="https://huggingface.co/flowm123">Models & Datasets</a></h3>
+</p>
+
 Welcome to the codebase for the paper [Flow Equivariant World Models: Memory for Partially Observed Dynamic Environments](https://flowequivariantworldmodels.github.io/)! This repository contains the code and commands for training and running inference on FloWM models in the 2D (MNIST World) and 3D (Dynamic Block World) environments. It also contains the code for running the Diffusion Forcing Transformer (DFoT) and Diffusion State Space Model (DFoT-SSM) baselines. Please follow the steps below to run experiments. 
 
 Contents:
