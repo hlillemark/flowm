@@ -32,7 +32,7 @@ esac
 
 echo "Using CUDA version flag: $CUDA_VERSION"
 
-ENV_NAME="flowm_test"
+ENV_NAME="flowm"
 
 
 # ---- robust conda initialization (for non-interactive scripts) ----
