@@ -1,4 +1,4 @@
-<h1 align="center"> Flow Equivariant World Models</h1>
+<h1 align="center"> Flow Equivariant World Models (ICML 2026)</h1>
 <p align="center">
   <p align="center">
     <a href="https://hansenlillemark.com/">Hansen Jin Lillemark*<sup>1, 2</sup></a>
@@ -17,7 +17,7 @@
   <h3 align="center"><a href="https://arxiv.org/abs/2601.01075">Paper</a> | <a href="https://flowequivariantworldmodels.github.io/">Website</a> | <a href="https://huggingface.co/flowm123">Models & Datasets</a></h3>
 </p>
 
-Welcome to the codebase for the paper [Flow Equivariant World Models: Memory for Partially Observed Dynamic Environments](https://flowequivariantworldmodels.github.io/)! This repository contains the code and commands for training and running inference on FloWM models in the 2D (MNIST World) and 3D (Dynamic Block World) environments. It also contains the code for running the Diffusion Forcing Transformer (DFoT) and Diffusion State Space Model (DFoT-SSM) baselines. Please follow the steps below to run experiments. 
+Welcome to the codebase for the paper [Flow Equivariant World Models: Memory for Partially Observed Dynamic Environments](https://flowequivariantworldmodels.github.io/), accepted at ICML 2026! This repository contains the code and commands for training and running inference on FloWM models in the 2D (MNIST World) and 3D (Dynamic Block World) environments. It also contains the code for running the Diffusion Forcing Transformer (DFoT) and Diffusion State Space Model (DFoT-SSM) baselines. Please follow the steps below to run experiments. 
 
 Contents:
 - [Environment Setup](#environment)
