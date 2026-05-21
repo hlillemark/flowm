@@ -35,6 +35,3 @@ dataset:
   external_cond_dim: 5
   max_frames: 140
 
-
-load: ./outputs/2026-03-25/15-07-11/checkpoints/last.ckpt
-resume: ehr9klnn
