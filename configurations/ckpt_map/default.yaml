@@ -30,6 +30,10 @@ algorithm:
         v2_dynamic: downloaded_checkpoints/hf_models/blockworld-models/blockworld/dynamic/dfot-ssm/v2_dynamic.ckpt
         v2_static: downloaded_checkpoints/hf_models/blockworld-models/blockworld/static/dfot-ssm/v2_static.ckpt
         tex: downloaded_checkpoints/hf_models/blockworld-models/blockworld/tex/dfot-ssm/tex.ckpt
+    rssm:
+      blockworld:
+        v2_dynamic_50m: downloaded_checkpoints/hf_models/blockworld-models/blockworld/dynamic/rssm/v2_dynamic_50m.ckpt
+        v2_dynamic_400m: downloaded_checkpoints/hf_models/blockworld-models/blockworld/dynamic/rssm/v2_dynamic_400m.ckpt
 
   vae:
     pretrained_dir:

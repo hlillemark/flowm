@@ -1,0 +1,31 @@
+# @package algorithm.backbone
+
+model_type: rssm
+name: rssm
+
+input_shape: ${algorithm.x_shape}
+forward_window_size: ${dataset.max_frames}
+action_dim: ${dataset.external_cond_dim}
+
+deter: 1024
+hidden: 1024
+stoch: 32
+classes: 32
+blocks: 8
+obs_embed_dim: 512
+cnn_depth: 32
+action_embed_dim: 128
+
+norm: rms
+act: gelu
+unimix: 0.01
+outscale: 1.0
+imglayers: 2
+obslayers: 1
+dynlayers: 1
+absolute: false
+free_nats: 1.0
+
+loss_scale_recon: 1.0
+loss_scale_dyn: 1.0
+loss_scale_rep: 0.1

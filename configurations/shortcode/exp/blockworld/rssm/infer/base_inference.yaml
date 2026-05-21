@@ -1,0 +1,41 @@
+# @package _global_
+
+defaults:
+  - /shortcode/model_config/rssm/50m
+  - /shortcode/exp/blockworld/rssm/base
+  - _self_
+
+algorithm:
+  tasks:
+    prediction:
+      context_frames: 70
+      history_guidance:
+        sliding_context_len: 70
+    reconstruction:
+      enabled: false
+
+  logging:
+    max_num_videos: 8
+    metrics:
+    - fvd
+    - lpips
+    - mse
+    - psnr
+    - ssim
+
+dataset:
+  max_frames: 200
+  num_default_clips: 1000
+
+experiment:
+  tasks: ['validation']
+  devices: "auto"
+
+  validation:
+    batch_size: 128
+    precision: 32
+    dataloader:
+      num_workers: 4
+      shuffle: false
+    splits_included: ['dynamic_validation_smallworld_no_em_200']
+    sample_during_training: true

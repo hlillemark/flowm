@@ -2,7 +2,7 @@ from datasets.video import (
     MNISTWorldVideoDataset,
     BlockWorldVideoDataset,
 )
-from algorithms import DFoTVideo, FloWMVideo
+from algorithms import DFoTVideo, FloWMVideo, RSSMVideo
 from .base_exp import BaseLightningExperiment
 from .data_modules import _data_module_cls
 
@@ -15,6 +15,7 @@ class VideoGenerationExperiment(BaseLightningExperiment):
     compatible_algorithms = dict(
         dfot_video=DFoTVideo,
         flowm_video=FloWMVideo,
+        rssm_video=RSSMVideo,
     )
 
     compatible_datasets = dict(

@@ -1,0 +1,40 @@
+# @package _global_
+
+# python -m main shortcode=exp/blockworld/rssm/train/dynamic_400m +name=rssm_blockworld_dynamic_400m algorithm=rssm_video experiment=video_generation dataset=blockworld ckpt_map=default wandb.mode=dryrun
+
+defaults:
+  - /shortcode/model_config/rssm/400m
+  - exp/blockworld/rssm/base
+  - _self_
+
+algorithm:
+  tasks:
+    prediction:
+      context_frames: 50
+
+experiment:
+  devices: 1
+  training:
+    batch_size: 16
+    splits_included: ['sunday_v2_training']
+    checkpointing:
+      every_n_train_steps: 5000
+      every_n_epochs: null
+      save_last: true
+      save_top_k: 2
+      monitor: validation/loss
+      mode: min
+      filename: rssm-dynamic_400m-{epoch:02d}-{step:07d}
+
+  validation:
+    batch_size: 4
+    splits_included: ['sunday_v2_validation']
+    val_every_n_step: 5000
+
+dataset:
+  external_cond_dim: 5
+  max_frames: 140
+
+
+load: ./outputs/2026-03-25/15-07-11/checkpoints/last.ckpt
+resume: ehr9klnn

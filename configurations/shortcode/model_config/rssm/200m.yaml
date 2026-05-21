@@ -1,0 +1,15 @@
+# @package _global_
+
+defaults:
+  - base
+
+algorithm:
+  backbone:
+    hidden: 1024
+    obs_embed_dim: 1024
+    deter: 8192
+    cnn_depth: 64
+    stoch: 64
+    classes: 32
+    blocks: 8
+    action_embed_dim: 1024

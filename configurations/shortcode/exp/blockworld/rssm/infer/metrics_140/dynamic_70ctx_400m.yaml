@@ -1,0 +1,33 @@
+# @package _global_
+
+defaults:
+  - /shortcode/exp/blockworld/rssm/infer/base_inference
+  - /shortcode/model_config/rssm/400m
+
+algorithm:
+  tasks:
+    prediction:
+      context_frames: 70
+      history_guidance:
+        sliding_context_len: 70
+    reconstruction:
+      enabled: false
+  logging:
+    metrics:
+    # - fvd
+    # - lpips
+    - mse
+    - psnr
+    - ssim
+
+dataset:
+  max_frames: 140
+  n_frames: 140
+
+experiment:
+  validation:
+    batch_size: 16
+    splits_included: ['sunday_v2_validation']
+
+load: ${algorithm.model_weights.rssm.blockworld.v2_dynamic_400m}
+

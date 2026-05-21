@@ -1,0 +1,39 @@
+# Important: Be careful when modifying this file! The fields in file will be overridden by the dataset dependent config file in the `configurations/dataset_experiment` folder so consider making changes there instead!
+
+defaults:
+  - base_pytorch_algo
+  - backbone: rssm
+  - vae: mae_vae_blockworld # just placeholder
+  - _self_
+
+x_shape: ${dataset.observation_shape}
+max_frames: ${dataset.max_frames}
+n_frames: ${dataset.n_frames}
+frame_skip: ${dataset.frame_skip}
+external_cond_dim: ${dataset.external_cond_dim}
+external_cond_stack: ${dataset.external_cond_stack}
+latent: ${dataset.latent}
+
+tasks:
+  prediction:
+    enabled: True
+    context_frames: 50
+  interpolation:
+    enabled: False
+  reconstruction:
+    enabled: False
+
+compile: False
+
+logging:
+  deterministic: 42
+  loss_freq: 100
+  grad_norm_freq: 1000
+  max_num_videos: 32
+  n_metrics_frames: null
+  metrics:
+    - mse
+    - psnr
+  metrics_batch_size: 16
+  sanity_generation: True
+  raw_dir: null

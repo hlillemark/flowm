@@ -14,7 +14,7 @@ debug: false # global debug flag will be passed into configuration of experiment
 wandb:
   entity: null # wandb account name / organization name 
   project: null # wandb project name; if not provided, defaults to root folder name 
-  mode: dryrun # set wandb logging to online, offline or dryrun
+  mode: online # set wandb logging to online, offline or dryrun
   api_key: ${secrets.wandb_api_key}
 
 resume: null # wandb run id to resume logging
