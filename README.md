@@ -107,15 +107,14 @@ Please see our [wiki](https://github.com/hlillemark/flowm/wiki) for more informa
 If you find our work interesting or helpful, please cite it using the following BibTex:
 
 ```bibtex
-@misc{lillemark2026flowequivariantworldmodels,
-    title={Flow Equivariant World Models: Memory for Partially Observed Dynamic Environments}, 
-    author={Hansen Jin Lillemark and Benhao Huang and Fangneng Zhan and Yilun Du and Thomas Anderson Keller},
-    year={2026},
-    eprint={2601.01075},
-    archivePrefix={arXiv},
-    primaryClass={cs.LG},
-    url={https://arxiv.org/abs/2601.01075}, 
-  }
+@inproceedings{
+lillemark2026flow,
+title={Flow Equivariant World Models: Structured Memory for Dynamic Environments},
+author={Hansen Lillemark and Benhao Huang and Fangneng Zhan and Yilun Du and T. Anderson Keller},
+booktitle={Forty-third International Conference on Machine Learning},
+year={2026},
+url={https://arxiv.org/abs/2601.01075}
+}
 ```
 
 # Acknowledgement
